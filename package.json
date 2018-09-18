@@ -1,0 +1,89 @@
+{
+  "name": "puppeteer-cloud-function",
+  "version": "1.0.0",
+  "description": "Puppeteer package for AWS Lambda, Google Cloud Function, ...",
+  "main": "src/handlers.js",
+  "engines": {
+    "node": ">= 6.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntanh1402/puppeteer-cloud-function.git"
+  },
+  "keywords": [
+    "serverless",
+    "chromium",
+    "headless",
+    "aws",
+    "lambda",
+    "screenshot",
+    "html",
+    "pdf"
+  ],
+  "author": "Anh Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ntanh1402/puppeteer-cloud-function/issues"
+  },
+  "homepage": "https://github.com/ntanh1402/puppeteer-cloud-function",
+  "config": {
+    "jsSrc": "src/"
+  },
+  "scripts": {
+    "package": "npm run package-prepare && cp chronium/binary/headless_shell.tar.gz dist && cd dist && zip -rq ../package.zip .",
+    "package-nochrome": "npm run package-prepare && cd dist && zip -rq ../package.zip .",
+    "package-prepare": "npm run fix-lint && npm run lint && npm run babel && cp -r package.json dist && cd dist && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 npm install --production",
+    "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
+    "local": "npm run babel && cp -r node_modules dist && node dist/starter-kit/local.js",
+    "lint": "./node_modules/.bin/eslint src",
+    "fix-lint": "./node_modules/.bin/eslint --fix src",
+    "deploy": "serverless deploy -v",
+    "upgrade-dependencies": "yarn upgrade-interactive --latest --exact"
+  },
+  "dependencies": {
+    "puppeteer": "^1.8.0",
+    "tar": "^4.0.1"
+  },
+  "devDependencies": {
+    "ava": "0.25.0",
+    "aws-sdk": "^2.111.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "6.26.3",
+    "babel-plugin-transform-object-entries": "1.0.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-stage-3": "6.24.1",
+    "babel-register": "6.26.0",
+    "eslint": "^5.6.0",
+    "eslint-config-google": "^0.10.0",
+    "serverless": "1.32.0",
+    "serverless-hooks-plugin": "^1.1.0"
+  },
+  "ava": {
+    "require": "babel-register",
+    "babel": "inherits"
+  },
+  "babel": {
+    "sourceMaps": true,
+    "presets": [
+      [
+        "env",
+        {
+          "modules": "commonjs",
+          "targets": {
+            "node": "6.10"
+          },
+          "include": [
+            "es7.object.values",
+            "es7.object.entries"
+          ]
+        }
+      ],
+      "stage-3"
+    ],
+    "plugins": [
+      "transform-object-rest-spread",
+      "transform-object-entries"
+    ]
+  }
+}

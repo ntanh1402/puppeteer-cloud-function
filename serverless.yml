@@ -1,0 +1,72 @@
+service: puppeteer-cloud-function
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+
+package:
+  artifact: ./package.zip
+
+plugins:
+  - serverless-hooks-plugin
+
+custom:
+  hooks:
+    package:initialize:
+      - npm run package
+
+functions:
+  pdf:
+    description: Convert HTML to PDF
+    memorySize: 1536
+    timeout: 30
+    handler: pdf.handler
+    events:
+      - http:
+          path: pdf
+          method: get
+    environment:
+      DEBUG: 0
+
+  html:
+    description: Get full html
+    memorySize: 1536
+    timeout: 30
+    handler: html.handler
+    events:
+      - http:
+          path: html
+          method: get
+    environment:
+      DEBUG: 0
+
+  screenshot:
+    description: Take screenshot
+    memorySize: 1536
+    timeout: 30
+    handler: screenshot.handler
+    events:
+      - http:
+          path: screenshot
+          method: get
+    environment:
+      DEBUG: 0
+      
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Properties:
+        BinaryMediaTypes:
+          - "*/*"
+
+    # Enable X-Ray tracing on Lambda functions
+    # ScreenshotLambdaFunction:
+    #   Properties:
+    #     TracingConfig:
+    #       Mode: Active
+    # PdfLambdaFunction:
+    #   Properties:
+    #     TracingConfig:
+    #       Mode: Active
