@@ -1,7 +1,3 @@
-const aws = require('aws-sdk');
-const s3 = new aws.S3({
-  apiVersion: '2006-03-01',
-});
 const fs = require('fs');
 const tar = require('tar');
 const puppeteer = require('puppeteer');
@@ -39,9 +35,6 @@ const setupChrome = async () => {
     if (await existsLocalChrome()) {
       debugLog('setup local chrome');
       await setupLocalChrome();
-    } else {
-      debugLog('setup s3 chrome');
-      await setupS3Chrome();
     }
     debugLog('setup done');
   }
@@ -75,22 +68,6 @@ const setupLocalChrome = () => {
   });
 };
 
-const setupS3Chrome = () => {
-  return new Promise((resolve, reject) => {
-    const params = {
-      Bucket: config.remoteChromeS3Bucket,
-      Key: config.remoteChromeS3Key,
-    };
-    s3.getObject(params)
-        .createReadStream()
-        .on('error', (err) => reject(err))
-        .pipe(tar.x({
-          C: config.setupChromePath,
-        }))
-        .on('error', (err) => reject(err))
-        .on('end', () => resolve());
-  });
-};
 
 const debugLog = (log) => {
   if (config.DEBUG) {

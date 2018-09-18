@@ -2,7 +2,6 @@
   "name": "puppeteer-cloud-function",
   "version": "1.0.0",
   "description": "Puppeteer package for AWS Lambda, Google Cloud Function, ...",
-  "main": "src/handlers.js",
   "engines": {
     "node": ">= 6.10.0"
   },
@@ -14,8 +13,6 @@
     "serverless",
     "chromium",
     "headless",
-    "aws",
-    "lambda",
     "screenshot",
     "html",
     "pdf"
@@ -46,7 +43,6 @@
   },
   "devDependencies": {
     "ava": "0.25.0",
-    "aws-sdk": "^2.111.0",
     "babel-cli": "^6.26.0",
     "babel-core": "6.26.3",
     "babel-plugin-transform-object-entries": "1.0.0",
