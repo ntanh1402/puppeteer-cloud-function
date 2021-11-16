@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "ava": "0.25.0",
-    "aws-sdk": "^2.111.0",
+    "aws-sdk": "^2.814.0",
     "babel-cli": "^6.26.0",
     "babel-core": "6.26.3",
     "babel-plugin-transform-object-entries": "1.0.0",
